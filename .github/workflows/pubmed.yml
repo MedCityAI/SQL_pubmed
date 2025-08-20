@@ -24,7 +24,7 @@ jobs:
           pip install requests
 
       - name: Run PubMed script
-        run: python your_script.py   # <-- replace with your actual script filename
+        run: python Rochester_db_gen.py
 
       - name: Commit and push changes
         run: |
