@@ -11,7 +11,7 @@ DB_FILE = "pubmed_rochester.db"
 one_year_ago = (datetime.utcnow() - timedelta(days=365)).strftime("%Y/%m/%d")
 today = datetime.utcnow().strftime("%Y/%m/%d")
 
-query = f'(("Rochester MN"[AD]) OR ("Rochester Minnesota"[AD])) AND ("{one_year_ago}"[PDAT] : "{today}"[PDAT])'
+query = f'(("Rochester MN"[AD:~5]) OR ("Rochester Minnesota"[AD:~5])) AND ("{one_year_ago}"[PDAT] : "{today}"[PDAT])'
 
 
 def get_pmids():
