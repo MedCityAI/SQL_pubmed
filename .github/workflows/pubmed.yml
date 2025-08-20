@@ -26,10 +26,26 @@ jobs:
       - name: Run PubMed script
         run: python Rochester_db_gen.py
 
+      - name: Export DB to CSV
+        run: |
+          python - <<'EOF'
+          import sqlite3, csv
+          conn = sqlite3.connect("pubmed_rochester.db")
+          cur = conn.cursor()
+          cur.execute("SELECT * FROM pubmed_articles")
+          rows = cur.fetchall()
+          headers = [d[0] for d in cur.description]
+          with open("pubmed_rochester.csv", "w", newline="", encoding="utf-8") as f:
+              writer = csv.writer(f)
+              writer.writerow(headers)
+              writer.writerows(rows)
+          conn.close()
+          EOF
+
       - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add pubmed_rochester.db
-          git commit -m "Update PubMed Rochester DB: $(date -u)" || echo "No changes to commit"
+          git add pubmed_rochester.db pubmed_rochester.csv
+          git commit -m "Update PubMed Rochester DB & CSV: $(date -u)" || echo "No changes to commit"
           git push
